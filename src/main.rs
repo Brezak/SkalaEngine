@@ -1,11 +1,17 @@
 #![warn(clippy::all)]
 
-use pixels::{SurfaceTexture, Pixels, wgpu::Error, Error as PixelError};
-use winit::{event_loop::EventLoop, dpi::LogicalSize, window::WindowBuilder, event::Event};
+use std::time::Instant;
+
+use game::Game;
+use log::error;
+use pixels::{SurfaceTexture, Pixels, Error as PixelError};
+use winit::{event_loop::{EventLoop, ControlFlow}, dpi::LogicalSize, window::WindowBuilder, event::Event};
 use winit_input_helper::WinitInputHelper;
 
-const WIDTH: u32 = 320;
-const HEIGHT: u32 = 200;
+pub(crate) const WIDTH: u32 = 320;
+pub(crate) const HEIGHT: u32 = 200;
+
+mod game;
 
 const NAME: &str = include_str!("name.txt");
 
@@ -34,12 +40,37 @@ fn main() -> Result<(), PixelError> {
     };
 
     // Game
+    let mut game = Game::new();
 
     event_loop.run(move |event, _window_target, control_flow| {
         if let Event::RedrawRequested(_window_id) = event {
-            
+            game.draw(pixels.get_frame());
+            if pixels
+                .render()
+                .map_err(|err| error!("pixels.render() failed: {}\n --> {}:{}:{}", err, file!(), line!(), column!()))
+                .is_err()
+            {
+                *control_flow = ControlFlow::Exit;
+                return;
+            }
+        }
+
+        if input.quit() {
+            *control_flow = ControlFlow::Exit;
+            return;
+        }
+
+        if input.update(&event) {
+            // Resize the window
+            if let Some(size) = input.window_resized() {
+                pixels.resize_surface(size.width, size.height);
+            }
+
+            if !game.is_paused() {
+                game.simulate_logic(Instant::now(), &mut input);
+            }
+
+            window.request_redraw();
         }
     });
-
-    Ok(())
 }
