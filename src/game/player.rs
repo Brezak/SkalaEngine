@@ -17,6 +17,13 @@ impl Player {
 
 impl Default for Player {
     fn default() -> Self {
-        Self { pos_x: 4 << FRACTION_BITS, pos_y: 4 << FRACTION_BITS, dir_x: -1 << FRACTION_BITS, dir_y: 0, cam_plane_x: 0, cam_plane_y: 0 }
+        Self {
+            pos_x: 4 << FRACTION_BITS,
+            pos_y: 4 << FRACTION_BITS,
+            dir_x: -1 << FRACTION_BITS,
+            dir_y: 0,
+            cam_plane_x: 0,
+            cam_plane_y: 0,
+        }
     }
 }

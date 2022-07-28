@@ -4,8 +4,13 @@ use std::time::Instant;
 
 use game::Game;
 use log::error;
-use pixels::{SurfaceTexture, Pixels, Error as PixelError};
-use winit::{event_loop::{EventLoop, ControlFlow}, dpi::LogicalSize, window::WindowBuilder, event::Event};
+use pixels::{Error as PixelError, Pixels, SurfaceTexture};
+use winit::{
+    dpi::LogicalSize,
+    event::Event,
+    event_loop::{ControlFlow, EventLoop},
+    window::WindowBuilder,
+};
 use winit_input_helper::WinitInputHelper;
 
 pub(crate) const WIDTH: u32 = 320;
@@ -34,7 +39,7 @@ fn main() -> Result<(), PixelError> {
 
     let mut pixels = {
         let window_size = window.inner_size();
-        let surface_texture = SurfaceTexture::new(window_size.width, window_size.height, &window);  
+        let surface_texture = SurfaceTexture::new(window_size.width, window_size.height, &window);
 
         Pixels::new(WIDTH, HEIGHT, surface_texture)?
     };
@@ -47,7 +52,15 @@ fn main() -> Result<(), PixelError> {
             game.draw(pixels.get_frame());
             if pixels
                 .render()
-                .map_err(|err| error!("pixels.render() failed: {}\n --> {}:{}:{}", err, file!(), line!(), column!()))
+                .map_err(|err| {
+                    error!(
+                        "pixels.render() failed: {}\n --> {}:{}:{}",
+                        err,
+                        file!(),
+                        line!(),
+                        column!()
+                    )
+                })
                 .is_err()
             {
                 *control_flow = ControlFlow::Exit;
