@@ -17,6 +17,9 @@ pub(crate) const WIDTH: u32 = 320;
 pub(crate) const HEIGHT: u32 = 200;
 
 mod game;
+mod fraction_num;
+
+pub(crate) use fraction_num::{FractionNum, SignedFractionNum};
 
 const NAME: &str = include_str!("name.txt");
 

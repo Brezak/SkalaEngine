@@ -1,15 +1,17 @@
-const FRACTION_BITS: u64 = 12;
+use crate::{FractionNum, fraction_num::SignedFractionNum};
 
 pub struct Player {
-    pos_x: u64,
-    pos_y: u64,
-    dir_x: i64,
-    dir_y: i64,
-    cam_plane_x: i64,
-    cam_plane_y: i64,
+    pos_x: FractionNum,
+    pos_y: FractionNum,
+    dir_x: SignedFractionNum,
+    dir_y: SignedFractionNum,
+    cam_plane_x: SignedFractionNum,
+    cam_plane_y: SignedFractionNum,
 }
 
 impl Player {
+    pub const FRACTION_BITS: u64 = FractionNum::FRACTION_BITS;
+
     pub fn new() -> Self {
         Self::default()
     }
@@ -18,12 +20,12 @@ impl Player {
 impl Default for Player {
     fn default() -> Self {
         Self {
-            pos_x: 4 << FRACTION_BITS,
-            pos_y: 4 << FRACTION_BITS,
-            dir_x: -1 << FRACTION_BITS,
-            dir_y: 0,
-            cam_plane_x: 0,
-            cam_plane_y: 0,
+            pos_x: 4.into(),
+            pos_y: 4.into(),
+            dir_x: (-1).into(),
+            dir_y: 0.into(),
+            cam_plane_x: 0.into(),
+            cam_plane_y: 0.into(),
         }
     }
 }
