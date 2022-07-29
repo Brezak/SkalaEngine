@@ -1,4 +1,8 @@
-use std::{ops::{DivAssign, AddAssign, Add, Sub, SubAssign, Mul, MulAssign, Div}, fmt::{Display, Debug}, num::TryFromIntError};
+use std::{
+    fmt::{Debug, Display},
+    num::TryFromIntError,
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
+};
 
 const INTERNAL_FRACTION_BITS: u64 = 12;
 
@@ -125,7 +129,7 @@ impl DivAssign<u64> for FractionNum {
 impl Display for FractionNum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let num: f64 = self.0 as f64 / 2f64.powf(Self::FRACTION_BITS as f64);
-        
+
         write!(f, "{num}")
     }
 }
@@ -133,7 +137,7 @@ impl Display for FractionNum {
 impl Debug for FractionNum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let num: f64 = self.0 as f64 / 2f64.powf(Self::FRACTION_BITS as f64);
-        
+
         f.debug_struct("FractionNum")
             .field("Raw", &self.0)
             .field("Float", &num)
@@ -141,6 +145,7 @@ impl Debug for FractionNum {
     }
 }
 
+#[derive(Default, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 pub struct SignedFractionNum(i64);
 
 impl SignedFractionNum {
@@ -263,7 +268,7 @@ impl DivAssign<i64> for SignedFractionNum {
 impl Display for SignedFractionNum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let num: f64 = self.0 as f64 / 2f64.powf(Self::FRACTION_BITS as f64);
-        
+
         write!(f, "{num}")
     }
 }
@@ -271,7 +276,7 @@ impl Display for SignedFractionNum {
 impl Debug for SignedFractionNum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let num: f64 = self.0 as f64 / 2f64.powf(Self::FRACTION_BITS as f64);
-        
+
         f.debug_struct("SignedFractionNum")
             .field("Raw", &self.0)
             .field("Float", &num)
@@ -298,5 +303,33 @@ impl TryFrom<FractionNum> for SignedFractionNum {
             Ok(x) => Ok(SignedFractionNum::from_raw_i64(x)),
             Err(err) => Err(err),
         }
+    }
+}
+
+
+#[cfg(test)]
+mod test {
+    use crate::fraction_num::SignedFractionNum;
+
+    use super::FractionNum;
+
+    #[test]
+    fn test_default() {
+        assert_eq!(FractionNum::default(), FractionNum::new(0));
+        assert_eq!(SignedFractionNum::default(), SignedFractionNum::new(0));
+    }
+
+    #[test]
+    fn test_addtion() {
+        assert_eq!(FractionNum::new(1) + FractionNum::new(2), FractionNum::new(3));
+        assert_eq!(SignedFractionNum::new(1) + SignedFractionNum::new(2), SignedFractionNum::new(3));
+
+        assert_eq!(SignedFractionNum::new(1) + SignedFractionNum::new(-2), SignedFractionNum::new(-1));
+
+        assert_eq!(FractionNum::new(1) + 2, FractionNum::new(3));
+        assert_eq!(SignedFractionNum::new(1) + 2, SignedFractionNum::new(3));
+
+        assert_eq!(SignedFractionNum::new(1) + -2, SignedFractionNum::new(-1));
+        
     }
 }
