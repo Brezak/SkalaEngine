@@ -4,7 +4,7 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
 };
 
-const INTERNAL_FRACTION_BITS: u64 = 12;
+const INTERNAL_FRACTION_BITS: u64 = 16;
 
 #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 pub struct FractionNum(u64);
@@ -21,11 +21,11 @@ impl FractionNum {
         Self(num)
     }
 
-    pub fn as_u64(self) -> u64 {
+    pub fn into_u64(self) -> u64 {
         self.0 >> Self::FRACTION_BITS
     }
 
-    pub fn as_raw_u64(self) -> u64 {
+    pub fn into_raw_u64(self) -> u64 {
         self.0
     }
 }
@@ -43,7 +43,7 @@ impl From<FractionNum> for u64 {
 }
 
 impl Add for FractionNum {
-    type Output = FractionNum;
+    type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
         Self(self.0 + rhs.0)
@@ -71,7 +71,7 @@ impl AddAssign<u64> for FractionNum {
 }
 
 impl Sub for FractionNum {
-    type Output = FractionNum;
+    type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {
         Self(self.0 - rhs.0)
@@ -112,8 +112,22 @@ impl MulAssign<u64> for FractionNum {
     }
 }
 
+impl Mul<FractionNum> for FractionNum {
+    type Output = Self;
+
+    fn mul(self, rhs: FractionNum) -> Self::Output {
+        FractionNum::from_raw_u64((self.0 * rhs.0) >> 16)
+    }
+}
+
+impl MulAssign<FractionNum> for FractionNum {
+    fn mul_assign(&mut self, rhs: FractionNum) {
+        self.0 = (self.0 * rhs.0) >> 16
+    }
+}
+
 impl Div<u64> for FractionNum {
-    type Output = FractionNum;
+    type Output = Self;
 
     fn div(self, rhs: u64) -> Self::Output {
         Self(self.0 / rhs)
@@ -123,6 +137,23 @@ impl Div<u64> for FractionNum {
 impl DivAssign<u64> for FractionNum {
     fn div_assign(&mut self, rhs: u64) {
         self.0 /= rhs
+    }
+}
+
+impl Div<FractionNum> for FractionNum {
+    type Output = Self;
+
+    fn div(self, rhs: FractionNum) -> Self::Output {
+        let shifted = self.0 << FractionNum::FRACTION_BITS;
+        FractionNum(shifted / rhs.0)
+
+    }
+}
+
+impl DivAssign<FractionNum> for FractionNum {
+    fn div_assign(&mut self, rhs: FractionNum) {
+        self.0 <<= 16;
+        self.0 /= rhs.0;
     }
 }
 
@@ -251,6 +282,20 @@ impl MulAssign<i64> for SignedFractionNum {
     }
 }
 
+impl Mul<SignedFractionNum> for SignedFractionNum {
+    type Output = SignedFractionNum;
+
+    fn mul(self, rhs: SignedFractionNum) -> Self::Output {
+        SignedFractionNum::from_raw_i64((self.0 * rhs.0) >> 16)
+    }
+}
+
+impl MulAssign<SignedFractionNum> for SignedFractionNum {
+    fn mul_assign(&mut self, rhs: SignedFractionNum) {
+        self.0 = (self.0 * rhs.0) >> 16
+    }
+}
+
 impl Div<i64> for SignedFractionNum {
     type Output = SignedFractionNum;
 
@@ -262,6 +307,23 @@ impl Div<i64> for SignedFractionNum {
 impl DivAssign<i64> for SignedFractionNum {
     fn div_assign(&mut self, rhs: i64) {
         self.0 /= rhs
+    }
+}
+
+impl Div<SignedFractionNum> for SignedFractionNum {
+    type Output = Self;
+
+    fn div(self, rhs: SignedFractionNum) -> Self::Output {
+        let shifted = self.0 << SignedFractionNum::FRACTION_BITS;
+        SignedFractionNum(shifted / rhs.0)
+
+    }
+}
+
+impl DivAssign<SignedFractionNum> for SignedFractionNum {
+    fn div_assign(&mut self, rhs: SignedFractionNum) {
+        self.0 <<= 16;
+        self.0 /= rhs.0;
     }
 }
 
@@ -359,6 +421,24 @@ mod test {
         assert_eq!(FractionNum::new(1) * 2, FractionNum::new(2));
         assert_eq!(SignedFractionNum::new(1) * 2, SignedFractionNum::new(2));
         assert_eq!(SignedFractionNum::new(-1) * 2, SignedFractionNum::new(-2));
+
+        assert_eq!(FractionNum::new(2) * FractionNum::new(2), FractionNum::new(4));
+
+        let mut x = FractionNum::new(2);
+        x *= x;
+        assert_eq!(x, FractionNum::new(4));
+
+        assert_eq!(SignedFractionNum::new(2) * SignedFractionNum::new(2), SignedFractionNum::new(4));
+
+        let mut x = SignedFractionNum::new(2);
+        x *= x;
+        assert_eq!(x, SignedFractionNum::new(4));
+
+        assert_eq!(SignedFractionNum::new(-2) * SignedFractionNum::new(2), SignedFractionNum::new(-4));
+
+        let mut x = SignedFractionNum::new(-2);
+        x *= x;
+        assert_eq!(x, SignedFractionNum::new(4));
     }
 
     #[test]
@@ -366,6 +446,10 @@ mod test {
         assert_eq!(FractionNum::new(2) / 2, FractionNum::new(1));
         assert_eq!(SignedFractionNum::new(2) / 2, SignedFractionNum::new(1));
         assert_eq!(SignedFractionNum::new(-2) / 2, SignedFractionNum::new(-1));
+
+        assert_eq!(FractionNum::new(4) / FractionNum::new(2), FractionNum::new(2));
+        assert_eq!(SignedFractionNum::new(4) / SignedFractionNum::new(2), SignedFractionNum::new(2));
+        assert_eq!(SignedFractionNum::new(-4) / SignedFractionNum::new(2), SignedFractionNum::new(-2));
     }
 
     #[test]
