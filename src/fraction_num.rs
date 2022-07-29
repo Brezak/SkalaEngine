@@ -198,6 +198,10 @@ impl SignedFractionNum {
     pub fn into_raw_i64(self) -> i64 {
         self.0
     }
+
+    pub fn abs(self) -> Self {
+        SignedFractionNum(self.0.abs())
+    }
 }
 
 impl From<i64> for SignedFractionNum {
@@ -414,6 +418,12 @@ mod test {
 
         assert_eq!(SignedFractionNum::new(1) + -2, SignedFractionNum::new(-1));
         
+    }
+
+    #[test]
+    fn test_abs(){
+        assert_eq!(SignedFractionNum::new(2).abs(), SignedFractionNum::new(2));
+        assert_eq!(SignedFractionNum::new(-2).abs(), SignedFractionNum::new(2));
     }
 
     #[test]
