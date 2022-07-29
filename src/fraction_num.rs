@@ -1,7 +1,7 @@
 use std::{
     fmt::{Debug, Display},
     num::TryFromIntError,
-    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign, Shl, Shr},
 };
 
 const INTERNAL_FRACTION_BITS: u64 = 16;
@@ -154,6 +154,198 @@ impl DivAssign<FractionNum> for FractionNum {
     fn div_assign(&mut self, rhs: FractionNum) {
         self.0 <<= 16;
         self.0 /= rhs.0;
+    }
+}
+
+impl Shl<u8> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u8) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i8> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i8) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<u16> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u16) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i16> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i16) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<u32> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u32) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i32> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i32) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<u64> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u64) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i64> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i64) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<u128> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u128) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i128> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i128) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<usize> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: usize) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<isize> for FractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: isize) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shr<u8> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u8) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i8> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i8) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<u16> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u16) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i16> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i16) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<u32> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u32) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i32> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i32) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<u64> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u64) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i64> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i64) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<u128> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u128) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i128> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i128) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<usize> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: usize) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<isize> for FractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: isize) -> Self::Output {
+        Self(self.0 >> rhs)
     }
 }
 
@@ -339,6 +531,198 @@ impl Display for SignedFractionNum {
     }
 }
 
+impl Shl<u8> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u8) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i8> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i8) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<u16> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u16) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i16> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i16) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<u32> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u32) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i32> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i32) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<u64> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u64) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i64> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i64) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<u128> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: u128) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<i128> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: i128) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<usize> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: usize) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shl<isize> for SignedFractionNum {
+    type Output = Self;
+
+    fn shl(self, rhs: isize) -> Self::Output {
+        Self(self.0 << rhs)
+    }
+}
+
+impl Shr<u8> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u8) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i8> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i8) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<u16> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u16) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i16> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i16) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<u32> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u32) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i32> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i32) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<u64> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u64) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i64> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i64) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<u128> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: u128) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<i128> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: i128) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<usize> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: usize) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
+impl Shr<isize> for SignedFractionNum {
+    type Output = Self;
+
+    fn shr(self, rhs: isize) -> Self::Output {
+        Self(self.0 >> rhs)
+    }
+}
+
 impl Debug for SignedFractionNum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let num: f64 = self.0 as f64 / 2f64.powf(Self::FRACTION_BITS as f64);
@@ -460,6 +844,20 @@ mod test {
         assert_eq!(FractionNum::new(4) / FractionNum::new(2), FractionNum::new(2));
         assert_eq!(SignedFractionNum::new(4) / SignedFractionNum::new(2), SignedFractionNum::new(2));
         assert_eq!(SignedFractionNum::new(-4) / SignedFractionNum::new(2), SignedFractionNum::new(-2));
+    }
+
+    #[test]
+    fn test_shift_left() {
+        assert_eq!(FractionNum::new(2) << 1, FractionNum::new(4));
+        assert_eq!(SignedFractionNum::new(2) << 1, SignedFractionNum::new(4));
+        assert_eq!(SignedFractionNum::new(-2) << 1, SignedFractionNum::new(-4));
+    }
+
+    #[test]
+    fn test_shift_right() {
+        assert_eq!(FractionNum::new(2) >> 1, FractionNum::new(1));
+        assert_eq!(SignedFractionNum::new(2) >> 1, SignedFractionNum::new(1));
+        assert_eq!(SignedFractionNum::new(-2) >> 1, SignedFractionNum::new(-1));
     }
 
     #[test]
