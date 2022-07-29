@@ -21,8 +21,8 @@ impl Default for Player {
         Self {
             pos_x: 4.into(),
             pos_y: 4.into(),
-            dir_x: (-1).into(),
-            dir_y: 0.into(),
+            dir_x: SignedFractional::from_num(0),
+            dir_y: SignedFractional::from_num(0),
             cam_plane_x: 0.into(),
             cam_plane_y: SignedFractional::from_num(0.66f64),
         }

@@ -10,7 +10,7 @@ mod player;
 pub(crate) const WORLD_MAP: [[u8; 8]; 8] = [
     [1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 2, 0, 2, 0, 0, 0],
     [1, 0, 0, 0, 0, 0, 0, 0],
     [1, 0, 0, 0, 0, 0, 0, 0],
     [1, 0, 0, 0, 0, 0, 0, 0],
@@ -26,6 +26,16 @@ pub struct Game {
 }
 
 impl Game {
+    fn satt_add_signed(x: &mut usize, y: isize) {
+        let num = y.unsigned_abs();
+
+        if y >= 0 {
+            *x = x.saturating_add(num);
+        } else {
+            *x = x.saturating_sub(num);
+        }
+    }
+
     pub fn new() -> Self {
         Self::default()
     }
@@ -53,12 +63,12 @@ impl Game {
 
             // Length of ray from one x or y-side to next x or y side
             let delta_dist_x = if ray_dir_x == SignedFractional::ZERO {
-                SignedFractional::from_num(i64::MAX)
+                SignedFractional::from_num(i16::MAX)
             } else {
                 (SignedFractional::from_num(1) / ray_dir_x).abs()
             };
             let delta_dist_y = if ray_dir_y == SignedFractional::ZERO {
-                SignedFractional::from_num(i64::MAX)
+                SignedFractional::from_num(i16::MAX)
             } else {
                 (SignedFractional::from_num(1) / ray_dir_y).abs()
             };
@@ -92,15 +102,19 @@ impl Game {
                 // Jump to next map tile, either in x direction or in y direction
                 if side_dist_x < side_dist_y {
                     side_dist_x += delta_dist_x;
-                    map_x += step_x.to_num::<usize>();
+                    Self::satt_add_signed(&mut map_x, step_x.to_num::<isize>());
                     wall_hit_side = WallHitSide::NS;
                 } else {
                     side_dist_y += delta_dist_y;
-                    map_y += step_y.to_num::<usize>();
+                    Self::satt_add_signed(&mut map_y, step_y.to_num::<isize>());
                     wall_hit_side = WallHitSide::EW;
                 }
 
                 // Check if ray has hit a wall
+                if map_x == 8 || map_y == 8 {
+                    println!("Fuck {map_x}, {map_y}");
+                }
+                
                 if WORLD_MAP[map_x][map_y] != 0 {
                     hit = true;
                 }
@@ -129,8 +143,10 @@ impl Game {
             };
 
             let mut color = match WORLD_MAP[map_x as usize][map_y as usize] {
-                0 => [0u8, 0, 0, 0],
-                _ => [255, 0, 0, 255],
+                0 => [0u8, 0, 0, 0],                
+                1 => [255, 0, 0, 255],
+                2 => [0, 255, 0, 255],
+                _ => [252, 20, 221, 255]
             };
 
             // Give x and y sides different brightness
