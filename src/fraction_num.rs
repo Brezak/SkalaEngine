@@ -320,7 +320,28 @@ mod test {
     }
 
     #[test]
+    fn test_conversion() {
+        assert!(SignedFractionNum::try_from(FractionNum::new(1)).is_ok());
+        assert!(SignedFractionNum::try_from(FractionNum::new(u64::MAX)).is_err());
+        assert!(FractionNum::try_from(SignedFractionNum::new(1)).is_ok());
+        assert!(FractionNum::try_from(SignedFractionNum::new(-1)).is_err());
+    }
+
+    #[test]
     fn test_addtion() {
+        assert_eq!(FractionNum::new(1) + FractionNum::new(2), FractionNum::new(3));
+        assert_eq!(SignedFractionNum::new(1) + SignedFractionNum::new(2), SignedFractionNum::new(3));
+
+        assert_eq!(SignedFractionNum::new(1) + SignedFractionNum::new(-2), SignedFractionNum::new(-1));
+
+        assert_eq!(FractionNum::new(1) + 2, FractionNum::new(3));
+        assert_eq!(SignedFractionNum::new(1) + 2, SignedFractionNum::new(3));
+
+        assert_eq!(SignedFractionNum::new(1) + -2, SignedFractionNum::new(-1));   
+    }
+
+    #[test]
+    fn test_subtraction() {
         assert_eq!(FractionNum::new(1) + FractionNum::new(2), FractionNum::new(3));
         assert_eq!(SignedFractionNum::new(1) + SignedFractionNum::new(2), SignedFractionNum::new(3));
 
@@ -332,4 +353,27 @@ mod test {
         assert_eq!(SignedFractionNum::new(1) + -2, SignedFractionNum::new(-1));
         
     }
+
+    #[test]
+    fn test_multiplication() {
+        assert_eq!(FractionNum::new(1) * 2, FractionNum::new(2));
+        assert_eq!(SignedFractionNum::new(1) * 2, SignedFractionNum::new(2));
+        assert_eq!(SignedFractionNum::new(-1) * 2, SignedFractionNum::new(-2));
+    }
+
+    #[test]
+    fn test_division() {
+        assert_eq!(FractionNum::new(2) / 2, FractionNum::new(1));
+        assert_eq!(SignedFractionNum::new(2) / 2, SignedFractionNum::new(1));
+        assert_eq!(SignedFractionNum::new(-2) / 2, SignedFractionNum::new(-1));
+    }
+
+    #[test]
+    #[should_panic(expected = "attempt to divide by zero")]
+    fn division_panics() {
+        let _ = FractionNum::default() / 0;
+        let _ = SignedFractionNum::default() / 0;
+    }
+
+
 }
