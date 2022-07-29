@@ -1,12 +1,13 @@
 use crate::{FractionNum, fraction_num::SignedFractionNum};
 
+#[derive(Debug)]
 pub struct Player {
-    pos_x: FractionNum,
-    pos_y: FractionNum,
-    dir_x: SignedFractionNum,
-    dir_y: SignedFractionNum,
-    cam_plane_x: SignedFractionNum,
-    cam_plane_y: SignedFractionNum,
+    pub pos_x: SignedFractionNum,
+    pub pos_y: SignedFractionNum,
+    pub dir_x: SignedFractionNum,
+    pub dir_y: SignedFractionNum,
+    pub cam_plane_x: SignedFractionNum,
+    pub cam_plane_y: SignedFractionNum,
 }
 
 impl Player {
@@ -26,6 +27,7 @@ impl Default for Player {
             dir_y: 0.into(),
             cam_plane_x: 0.into(),
             cam_plane_y: 0.into(),
+
         }
     }
 }
