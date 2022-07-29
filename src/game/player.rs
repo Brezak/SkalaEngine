@@ -1,19 +1,17 @@
-use crate::{FractionNum, fraction_num::SignedFractionNum};
+use crate::fraction_num::SignedFractional;
 
 #[derive(Debug)]
 pub struct Player {
-    pub pos_x: SignedFractionNum,
-    pub pos_y: SignedFractionNum,
-    pub dir_x: SignedFractionNum,
-    pub dir_y: SignedFractionNum,
-    pub cam_plane_x: SignedFractionNum,
-    pub cam_plane_y: SignedFractionNum,
+    pub pos_x: SignedFractional,
+    pub pos_y: SignedFractional,
+    pub dir_x: SignedFractional,
+    pub dir_y: SignedFractional,
+    pub cam_plane_x: SignedFractional,
+    pub cam_plane_y: SignedFractional,
 }
 
 impl Player {
-    pub const FRACTION_BITS: u64 = FractionNum::FRACTION_BITS;
-
-    pub fn new() -> Self {
+    pub fn _new() -> Self {
         Self::default()
     }
 }
@@ -26,8 +24,7 @@ impl Default for Player {
             dir_x: (-1).into(),
             dir_y: 0.into(),
             cam_plane_x: 0.into(),
-            cam_plane_y: 0.into(),
-
+            cam_plane_y: SignedFractional::from_num(0.66f64),
         }
     }
 }
