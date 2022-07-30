@@ -1,6 +1,7 @@
 use crate::{fraction_num::SignedFractional, HEIGHT, WIDTH};
 use std::time::{Duration, Instant};
 
+use fixed::traits::Fixed;
 use winit_input_helper::WinitInputHelper;
 
 use self::player::Player;
@@ -8,13 +9,13 @@ use self::player::Player;
 mod player;
 
 pub(crate) const WORLD_MAP: [[u8; 8]; 8] = [
-    [1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 2, 0, 2, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0],
+    [1, 2, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1], // 0 0
+    [1, 0, 0, 0, 0, 0, 2, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
@@ -45,6 +46,7 @@ impl Game {
         enum WallHitSide {
             NS,
             EW, // ...gross
+            _Void,
         }
 
         for x in 0..WIDTH {
@@ -54,8 +56,8 @@ impl Game {
             let ray_dir_y = self.player.dir_y + self.player.cam_plane_y * camera_x;
 
             // Map tile position
-            let mut map_x: usize = self.player.pos_x.to_num();
-            let mut map_y: usize = self.player.pos_y.to_num();
+            let mut map_x: usize = self.player.pos_x.round().to_num();
+            let mut map_y: usize = self.player.pos_y.round().to_num();
 
             // Length of ray from current position to next x or y side
             let mut side_dist_x: SignedFractional;
@@ -110,11 +112,6 @@ impl Game {
                     wall_hit_side = WallHitSide::EW;
                 }
 
-                // Check if ray has hit a wall
-                if map_x == 8 || map_y == 8 {
-                    println!("Fuck {map_x}, {map_y}");
-                }
-                
                 if WORLD_MAP[map_x][map_y] != 0 {
                     hit = true;
                 }
@@ -150,8 +147,10 @@ impl Game {
             };
 
             // Give x and y sides different brightness
-            if wall_hit_side == WallHitSide::EW {
-                color[3] /= 2;
+            match wall_hit_side {
+                WallHitSide::NS => {},
+                WallHitSide::EW => color[3] /= 2,
+                WallHitSide::_Void => color = [252, 20, 221, 255],
             }
 
             // Draw the pixels of the sprite as vertical line

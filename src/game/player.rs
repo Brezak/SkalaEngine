@@ -19,12 +19,12 @@ impl Player {
 impl Default for Player {
     fn default() -> Self {
         Self {
-            pos_x: 4.into(),
-            pos_y: 4.into(),
-            dir_x: SignedFractional::from_num(0),
+            pos_x: 2.into(),
+            pos_y: 2.into(),
+            dir_x: SignedFractional::from_num(-1),
             dir_y: SignedFractional::from_num(0),
-            cam_plane_x: 0.into(),
-            cam_plane_y: SignedFractional::from_num(0.66f64),
+            cam_plane_x: SignedFractional::from_num(0),
+            cam_plane_y: SignedFractional::from_num(0.66),
         }
     }
 }
