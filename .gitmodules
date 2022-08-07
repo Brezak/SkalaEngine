@@ -1,0 +1,3 @@
+[submodule "SkalaEngineNumerics"]
+	path = SkalaEngineNumerics
+	url = https://github.com/Brezak/SkalaEngineNumerics.git
